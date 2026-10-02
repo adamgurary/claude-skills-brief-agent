@@ -1,0 +1,31 @@
+{
+  "base_revision": "cff1e3f75d7fcf5b5913131bc5bbb00645fa89cd",
+  "files": {
+    ".gitignore": "27b7578d9e36d033683d74e7340ebc0ac1c958324620f118e309db5533dbfd9e",
+    "README.md": "6299c29ef260578eecfbe753836e2add0c7c0445aabd2d196f056974719b050c",
+    "baseline-fixture.tar.gz": "29704e92c94a85272317a32ca4107f28d2a97e313bc3104d421b6e009ddff0db",
+    "import_fixture.py": "89d6e4d8e66cd423ff173193f18e4c3bdb88b9176065e683c0dd98cbe0a406a8",
+    "participant_setup.py": "4c607590af5771386df7c21a0693952b243366cd3f40eff42b05d5eed9ae670a",
+    "plain/brief_agent/__init__.py": "505036d4bcfe929d1689f3725b71ae563ff622cd63d60237114ea0e8c00e9357",
+    "plain/brief_agent/graph.py": "1da06e5f6cf63b2b758116996567df291e31afd2a3ded1deb5702c825d13f851",
+    "plain/brief_agent/llm.py": "d5a2666c442a91c5a3934a60c21c9f5b51e5095f60fa327312cbeb35786e733b",
+    "plain/brief_agent/nodes.py": "49749fa4020bf7e3b284e31072b2e1f00cccefdf2fe3c5106e7e805b9491e1aa",
+    "plain/brief_agent/prompts.py": "6737c6e425e01e1adc8e6d9516ff29b08ff5acf66e33ae8679162222b28f5a3a",
+    "plain/brief_agent/research.py": "62f7b0fd3f597726a771ebb120e943c1067dea77f6702df31a5e1aedcf5ecf99",
+    "plain/brief_agent/state.py": "51e684737172c6cbf0e3fc9675cbbc02419f7087d0d58f0369d39cbc2fc0f985",
+    "plain/render.py": "bf8ef84ebfcb66c89687d7964c27a2226c02de37baf130c730000737573506f8",
+    "plain/run.py": "a655d6eac60d9e23f2be40ba2e747edcdd01491ddb16d61c9f8b239127ee6fd3",
+    "requirements.lock": "4c895449f73988f47ec3bd7c9a988c52489684fc1ef2e931b649ed6e44abf19b",
+    "run-v2.sh": "bb520e1409399cc5170b9ca62c57264a742e114b4a3abbb3216c976e4790143a",
+    "self_setup.py": "7b5335617ffc3a87d715460b32d121f64e2d9e900579d64ff22b7c34d68ca6f7",
+    "setup-v2.sh": "a3a84fc909bd854fd749d0ff8c4a3e725c1c06b359dffdb08a6cbe20ee9dae91",
+    "source-env.sh": "2847f9cb2f7eb41ed7275163f67ec4d683a49a2d5a279bc627452b0bd901f599",
+    "study-config.json": "892cf4fc3406a97fb3a82c42079ac725bd383ece671cc39b1493bd4c508b3dea",
+    "study_auth.py": "92a036fef3d5ac1f9e7a2a32c668a8af30613e29e40562ea1e6aea99081b0890"
+  },
+  "lock_sha256": "4c895449f73988f47ec3bd7c9a988c52489684fc1ef2e931b649ed6e44abf19b",
+  "model_endpoint": "databricks-gpt-5-6-terra",
+  "release_ref": "brief-agent-v2-2026-10-02-rc10",
+  "source_sha256": "cab66057ba1f7af8c6f5f70cb883b0380ad6930e86ee7d841e842fba5142cc27",
+  "staged_at_utc": "2026-10-02T19:57:23Z"
+}
