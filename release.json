@@ -1,0 +1,29 @@
+{
+  "base_revision": "cff1e3f75d7fcf5b5913131bc5bbb00645fa89cd",
+  "files": {
+    ".gitignore": "27b7578d9e36d033683d74e7340ebc0ac1c958324620f118e309db5533dbfd9e",
+    "README.md": "88033d75fc2a891d76d3fefa5146cc9ea13e2c3e949ccbc8c374d8018d1e0314",
+    "baseline-fixture.tar.gz": "a44e46edb93c3673109f6e701d10b2d7d97133f5e0d84203b9613c95c0a89410",
+    "import_fixture.py": "860170c88aea3baf809b26d93bab198b9cae1b281cec2aa96aa7b97bd9efe3c0",
+    "participant_setup.py": "b04282d7e290523e8cb8dde86c3be6c4341328e4eab5bb925b5445306a4ea96f",
+    "plain/brief_agent/__init__.py": "505036d4bcfe929d1689f3725b71ae563ff622cd63d60237114ea0e8c00e9357",
+    "plain/brief_agent/graph.py": "1da06e5f6cf63b2b758116996567df291e31afd2a3ded1deb5702c825d13f851",
+    "plain/brief_agent/llm.py": "d5a2666c442a91c5a3934a60c21c9f5b51e5095f60fa327312cbeb35786e733b",
+    "plain/brief_agent/nodes.py": "49749fa4020bf7e3b284e31072b2e1f00cccefdf2fe3c5106e7e805b9491e1aa",
+    "plain/brief_agent/prompts.py": "6737c6e425e01e1adc8e6d9516ff29b08ff5acf66e33ae8679162222b28f5a3a",
+    "plain/brief_agent/research.py": "62f7b0fd3f597726a771ebb120e943c1067dea77f6702df31a5e1aedcf5ecf99",
+    "plain/brief_agent/state.py": "51e684737172c6cbf0e3fc9675cbbc02419f7087d0d58f0369d39cbc2fc0f985",
+    "plain/render.py": "bf8ef84ebfcb66c89687d7964c27a2226c02de37baf130c730000737573506f8",
+    "plain/run.py": "a655d6eac60d9e23f2be40ba2e747edcdd01491ddb16d61c9f8b239127ee6fd3",
+    "requirements.lock": "4c895449f73988f47ec3bd7c9a988c52489684fc1ef2e931b649ed6e44abf19b",
+    "run-v2.sh": "444202a16601c8f6ea50e97bf7b0009913eb39f6a4252f6ade3c0c8dc176361e",
+    "self_setup.py": "a03a756ad7f01eefe08353876ff3ba3a89c582becba29415a5b567fd3b27aeaa",
+    "setup-v2.sh": "ed91b7ccccd1eed6991d72a96cbe0185b84e8160c42a079bef823b0a9f4e7254",
+    "study-config.json": "ca4b9ee9628360b7fa8146b4dc37f99a0885793f78c49d80cbc328dc7b1a09a0"
+  },
+  "lock_sha256": "4c895449f73988f47ec3bd7c9a988c52489684fc1ef2e931b649ed6e44abf19b",
+  "model_endpoint": "databricks-gpt-5-6-terra",
+  "release_ref": "brief-agent-v2-2026-10-02-rc7",
+  "source_sha256": "cab66057ba1f7af8c6f5f70cb883b0380ad6930e86ee7d841e842fba5142cc27",
+  "staged_at_utc": "2026-10-02T03:42:31Z"
+}

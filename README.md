@@ -1,31 +1,44 @@
-# Claude Code skills brief agent
+# Brief Agent V2 study starter
 
-This agent finds notable Claude Code skills and plugins, researches the strongest results, and produces a short briefing.
+This version starts with MLflow tracing configured and uses GPT-5.6 Terra.
+It researches live Hacker News and GitHub sources on normal runs.
 
-## How it works
+The organizer supplies the same private starter bundle to everyone. No email
+list or personal assignment file is required. The public tag is unpublished.
+Use the supplied bundle and its exact tag when cloning into a new directory.
 
-1. Plans a small set of search queries.
-2. Searches GitHub and Hacker News.
-3. Reads the top repositories and pages for more context.
-4. Uses a Databricks-hosted language model to write the brief.
+## Set up
 
-## Run it
-
-```bash
-git clone https://github.com/adamgurary/claude-skills-brief-agent.git
-cd claude-skills-brief-agent
-bash setup.sh
-```
-
-`setup.sh` installs the required tools, resolves and verifies the newest stable
-MLflow release from the configured package index, opens a browser for Databricks
-login, and runs the agent once. Re-running setup automatically upgrades MLflow
-when a newer stable release is available.
-
-For later runs:
+From your cloned starter:
 
 ```bash
-.venv/bin/python plain/run.py
+bash setup-v2.sh
 ```
 
-Generated Markdown and HTML briefs are saved in `output/`.
+Use your existing dogfood login or complete the SDK OAuth login yourself.
+Setup creates your own experiment and trace tables, then imports the five real
+baseline runs. This provisioning can take several minutes, with product waits
+recorded separately. The five runs represent simulated production weeks.
+Setup makes zero agent or model calls and preserves progress after interruption.
+Run the same command again to resume. Python 3.12 and locked dependencies from
+the Databricks internal package proxy are required.
+
+Setup prints the experiment URL, five brief paths, live rerun command, and
+`.study/manifest.json`. The manifest contains no credentials. Use the MLflow
+time range October 1, 2026, 22:50-23:10 UTC to see every baseline. Expand it
+through the current time when comparing new runs.
+
+## Run normally
+
+```bash
+bash run-v2.sh
+```
+
+This runs the live agent with the tested MLflow batching settings. Briefs appear
+under `output/`; traces append to your experiment. A repeat setup preserves your
+code edits. To start a fresh attempt, clone the same immutable bundle into a new
+directory and run setup there. Keep the old code, traces, briefs, and transcript.
+Do not delete `.study` to reset an attempt.
+
+The optional `--assignment /path/to/assignment.json` route remains available
+for previously prepared attempts. It is not needed for self-service setup.
