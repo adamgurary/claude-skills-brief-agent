@@ -3,13 +3,14 @@ import json
 import logging
 import os
 
+import mlflow
+
 from databricks.sdk import WorkspaceClient
 from databricks_langchain import ChatDatabricks
 from langchain_core.messages import HumanMessage, SystemMessage
 
 logger = logging.getLogger(__name__)
 
-PROFILE = os.environ.get("BRIEF_AGENT_PROFILE", "dogfood")
 MODEL_ENDPOINT = "databricks-gpt-5-6-terra"
 MAX_OUTPUT_TOKENS = 12_000
 MIN_RETRY_OUTPUT_TOKENS = 12_000
@@ -20,9 +21,14 @@ _model = None
 def _get_model() -> ChatDatabricks:
     global _model
     if _model is None:
+        host = os.environ.get("BRIEF_AGENT_WORKSPACE_HOST")
+        workspace_client = (
+            WorkspaceClient(host=host, auth_type="external-browser")
+            if host else WorkspaceClient(profile=os.environ.get("BRIEF_AGENT_PROFILE", "dogfood"))
+        )
         _model = ChatDatabricks(
             endpoint=MODEL_ENDPOINT,
-            workspace_client=WorkspaceClient(profile=PROFILE),
+            workspace_client=workspace_client,
         )
     return _model
 
@@ -58,6 +64,7 @@ def extract_text(content) -> str:
     return str(content or "").strip()
 
 
+@mlflow.trace(name="model_completion", span_type="LLM")
 def complete(system: str, user: str, max_tokens: int = MAX_OUTPUT_TOKENS,
              reasoning_effort: str = "low") -> str:
     messages = []
