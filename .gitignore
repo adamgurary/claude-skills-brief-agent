@@ -1,5 +1,5 @@
 .venv/
+.study/
+output/
 __pycache__/
 *.pyc
-output/
-.mlflow-version
