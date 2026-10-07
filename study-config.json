@@ -1,0 +1,10 @@
+{
+  "workspace_host": "https://e2-dogfood.staging.cloud.databricks.com",
+  "profile": "dogfood",
+  "catalog": "gurary_catalog",
+  "schema": "mlflow-user-studies",
+  "trace_table_template_prefix": "study_template_v1",
+  "warehouse_id": "867264e1d8edb9f9",
+  "fixture_sha256": "485402937f49ab05b4fec0b6493a2cba489373a1ea8a8d87fa771fced158aa88",
+  "fixture_archive_sha256": "fba478759353d3b8fa680cd1660ecbf9e17fb3847a3399ce798527d24989c82e"
+}
