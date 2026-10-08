@@ -1,15 +1,18 @@
 """Pipeline nodes for the brief generator."""
 import datetime
 import logging
+import os
 import re
 from pathlib import Path
+
+import mlflow
 
 from . import llm, prompts, research
 
 logger = logging.getLogger(__name__)
 
 _AGENT_ROOT = Path(__file__).resolve().parent.parent.parent
-OUTPUT_DIR = _AGENT_ROOT / "output"
+OUTPUT_DIR = Path(os.environ.get("BRIEF_AGENT_OUTPUT_DIR", str(_AGENT_ROOT / "output")))
 
 _PER_QUERY = 5
 _MAX_QUERIES = 4
@@ -25,6 +28,7 @@ def _slug(text: str) -> str:
     return s or "brief"
 
 
+@mlflow.trace(name="plan_queries", span_type="CHAIN")
 def plan_queries(state: dict) -> dict:
     topic = state.get("topic") or prompts.DEFAULT_TOPIC
     date = state.get("date") or _today()
@@ -56,6 +60,7 @@ def _gh_line(r: dict) -> str:
     return f"- [{r['title']}]({r['url']}) | {r['source']} | updated {r['updated']} | {r['stars']} stars{desc}"
 
 
+@mlflow.trace(name="web_research", span_type="CHAIN")
 def web_research(state: dict) -> dict:
     queries = state.get("search_queries") or [prompts.DEFAULT_TOPIC]
 
@@ -63,7 +68,9 @@ def web_research(state: dict) -> dict:
     seen_urls = set()
 
     for q in queries:
-        for r in research.hn_search.invoke({"query": q, "max_results": _PER_QUERY}):
+        for r in research.hn_search.invoke({"query": q, "max_results": _PER_QUERY,
+                                           "start": state.get("research_start"),
+                                           "end": state.get("research_end")}):
             url = r.get("url")
             if url and url in seen_urls:
                 continue
@@ -71,7 +78,8 @@ def web_research(state: dict) -> dict:
                 seen_urls.add(url)
             results.append(r)
         for r in research.github_search.invoke(
-            {"query": q, "max_results": _PER_QUERY, "sort": "stars"}
+            {"query": q, "max_results": _PER_QUERY, "sort": "stars",
+             "start": state.get("research_start"), "end": state.get("research_end")}
         ):
             url = r.get("url")
             if url and url in seen_urls:
@@ -100,6 +108,7 @@ def _rank_key(r: dict):
     return r.get("stars") or r.get("points") or 0
 
 
+@mlflow.trace(name="enrich_findings", span_type="CHAIN")
 def enrich_findings(state: dict) -> dict:
     results = state.get("results") or []
     top = sorted(results, key=_rank_key, reverse=True)[:_ENRICH_TOP]
@@ -127,10 +136,6 @@ def _strip_fence(text: str) -> str:
         if t.endswith("```"):
             t = t[:-3]
     return t.strip()
-
-
-def _tidy_links(md: str) -> str:
-    return re.sub(r"\]\(https?://", "](", md)
 
 
 def _ensure_source_link(md: str, results: list) -> str:
@@ -175,6 +180,7 @@ def _format_enriched(enriched: list) -> str:
     return "\n\n".join(blocks)
 
 
+@mlflow.trace(name="write_brief", span_type="CHAIN")
 def write_brief(state: dict) -> dict:
     topic = state.get("topic") or prompts.DEFAULT_TOPIC
     date = state.get("date") or _today()
@@ -191,7 +197,7 @@ def write_brief(state: dict) -> dict:
     draft = _strip_fence(llm.complete(system, user, max_tokens=12_000))
     if not draft:
         draft = _fallback_brief(date, results)
-    brief = _tidy_links(_ensure_source_link(draft, results))
+    brief = _ensure_source_link(draft, results)
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     out_path = OUTPUT_DIR / f"{date}-{_slug(topic)}.md"
