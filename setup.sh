@@ -14,6 +14,11 @@ set -euo pipefail
 cd "$(dirname "$0")"
 HOST="https://e2-dogfood.staging.cloud.databricks.com"
 PROFILE="${BRIEF_AGENT_PROFILE:-dogfood}"
+if [ -z "${BRIEF_AGENT_PROFILE:-}" ] && [ -f .brief-agent-profile ]; then
+  saved_profile=""
+  IFS= read -r saved_profile < .brief-agent-profile || true
+  PROFILE="${saved_profile:-dogfood}"
+fi
 PY_VERSION="3.12"
 DATABRICKS_CLI_VERSION="1.10.0"
 
@@ -126,6 +131,11 @@ else
   say "Logging into dogfood (profile '$PROFILE') -- finish the OAuth in your browser"
   databricks auth login --host "$HOST" --profile "$PROFILE"
 fi
+
+# Keep the selected profile for subsequent plain/run.py and setup.sh commands.
+# This file contains a profile name, never an access or refresh token.
+printf '%s\n' "$PROFILE" > .brief-agent-profile.tmp
+mv .brief-agent-profile.tmp .brief-agent-profile
 
 # --- 6. Run the agent --------------------------------------------------------
 say "Running the agent"

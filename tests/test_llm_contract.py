@@ -54,3 +54,31 @@ def test_wrong_profile_host_fails_before_calling_the_model(monkeypatch) -> None:
     with pytest.raises(RuntimeError, match="points at https://dogfood.staging.databricks.com"):
         llm.complete("system", "user")
     assert "messages" not in captured
+
+
+def test_saved_setup_profile_is_reused_on_plain_rerun(monkeypatch, tmp_path) -> None:
+    monkeypatch.delenv("BRIEF_AGENT_PROFILE", raising=False)
+    llm, captured = _load_llm(monkeypatch)
+    profile_path = tmp_path / ".brief-agent-profile"
+    profile_path.write_text("brief-agent\n")
+    monkeypatch.setattr(llm, "_PROFILE_PATH", profile_path)
+    assert llm.complete("system", "user") == "brief"
+    assert captured["workspace_client"].profile == "brief-agent"
+
+
+def test_explicit_profile_overrides_saved_selection(monkeypatch, tmp_path) -> None:
+    monkeypatch.setenv("BRIEF_AGENT_PROFILE", "another-valid-profile")
+    llm, captured = _load_llm(monkeypatch)
+    profile_path = tmp_path / ".brief-agent-profile"
+    profile_path.write_text("brief-agent\n")
+    monkeypatch.setattr(llm, "_PROFILE_PATH", profile_path)
+    llm.complete("system", "user")
+    assert captured["workspace_client"].profile == "another-valid-profile"
+
+
+def test_fresh_clone_keeps_original_dogfood_default(monkeypatch, tmp_path) -> None:
+    monkeypatch.delenv("BRIEF_AGENT_PROFILE", raising=False)
+    llm, captured = _load_llm(monkeypatch)
+    monkeypatch.setattr(llm, "_PROFILE_PATH", tmp_path / "absent")
+    llm.complete("system", "user")
+    assert captured["workspace_client"].profile == "dogfood"

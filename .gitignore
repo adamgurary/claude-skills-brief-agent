@@ -1,5 +1,7 @@
 .venv/
 __pycache__/
 *.pyc
+.brief-agent-profile
+.brief-agent-profile.tmp
 output/
 .mlflow-version
