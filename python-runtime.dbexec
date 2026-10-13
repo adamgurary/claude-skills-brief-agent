@@ -1,0 +1,23 @@
+{
+  "name": "brief-agent-python312",
+  "version": "3.12.11",
+  "archive": {
+    "format": "tgz",
+    "executable": "python/bin/python3.12"
+  },
+  "platforms": {
+    "linux-amd64": {
+      "url": "https://databricks-build-artifacts-manual-staging.s3-accelerate.amazonaws.com/python_toolchains/cpython-3.12.11%2B20250918-x86_64-unknown-linux-gnu-install_only.tar.gz",
+      "sha256": "ece4001b4fe88f5fb0dea8a08d84853bad13ebb7077b862a654ea9f2e01f48e6"
+    },
+    "linux-arm64": {
+      "url": "https://databricks-build-artifacts-manual-staging.s3-accelerate.amazonaws.com/python_toolchains/cpython-3.12.11%2B20250918-aarch64-unknown-linux-gnu-install_only.tar.gz",
+      "sha256": "15b73932865aff405b4226dce6683a2cce9665aea55281b0c44c6dc3f886fd7f"
+    },
+    "darwin-arm64": {
+      "url": "https://databricks-build-artifacts-manual-staging.s3-accelerate.amazonaws.com/python_toolchains/cpython-3.12.11%2B20250918-aarch64-apple-darwin-install_only.tar.gz",
+      "sha256": "f7bd4b224b5257a2530a9f798612239d9f95043a8432d44c93761a01c58492e9"
+    }
+  },
+  "min_dbexec_version": "0.2.37"
+}
