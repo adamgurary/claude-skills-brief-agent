@@ -118,3 +118,22 @@ def test_setup_installs_exact_newest_release_and_runs_agent(tmp_path: Path) -> N
     assert "mlflow==3.16.0" in uv_log.read_text().split()
     assert "MLflow: 3.16.0" in result.stdout
     assert run_marker.exists()
+
+
+def test_setup_remembers_profile_across_commands(tmp_path: Path) -> None:
+    workspace, env, _, _ = _setup_fixture(tmp_path)
+    first = subprocess.run(
+        ["bash", "setup.sh"], cwd=workspace,
+        env={**env, "BRIEF_AGENT_PROFILE": "brief-agent"},
+        capture_output=True, text=True, check=False,
+    )
+    assert first.returncode == 0, first.stderr
+    assert (workspace / ".brief-agent-profile").read_text() == "brief-agent\n"
+    env.pop("BRIEF_AGENT_PROFILE", None)
+    second = subprocess.run(
+        ["bash", "setup.sh"], cwd=workspace, env=env,
+        capture_output=True, text=True, check=False,
+    )
+    assert second.returncode == 0, second.stderr
+    assert "profile 'brief-agent'" in second.stdout
+    assert (workspace / ".brief-agent-profile").read_text() == "brief-agent\n"

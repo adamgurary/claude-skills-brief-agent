@@ -2,6 +2,7 @@
 import json
 import logging
 import os
+from pathlib import Path
 
 from databricks.sdk import WorkspaceClient
 from databricks_langchain import ChatDatabricks
@@ -9,7 +10,7 @@ from langchain_core.messages import HumanMessage, SystemMessage
 
 logger = logging.getLogger(__name__)
 
-PROFILE = os.environ.get("BRIEF_AGENT_PROFILE", "dogfood")
+_PROFILE_PATH = Path(__file__).resolve().parents[2] / ".brief-agent-profile"
 DOGFOOD_HOST = "https://e2-dogfood.staging.cloud.databricks.com"
 MODEL_ENDPOINT = "databricks-gpt-5-6-terra"
 MAX_OUTPUT_TOKENS = 12_000
@@ -18,15 +19,26 @@ MIN_RETRY_OUTPUT_TOKENS = 12_000
 _model = None
 
 
+def _profile_name() -> str:
+    override = os.environ.get("BRIEF_AGENT_PROFILE")
+    if override:
+        return override
+    try:
+        return _PROFILE_PATH.read_text().strip() or "dogfood"
+    except FileNotFoundError:
+        return "dogfood"
+
+
 def _workspace_client() -> WorkspaceClient:
     # Serving calls drop the workspace routing header, so on any other host (e.g. the
     # unified dogfood.staging.databricks.com URL) they redirect to an HTML login page
     # and fail later as "'str' object has no attribute 'choices'".
-    client = WorkspaceClient(profile=PROFILE)
+    profile = _profile_name()
+    client = WorkspaceClient(profile=profile)
     host = (client.config.host or "").rstrip("/")
     if host != DOGFOOD_HOST:
         raise RuntimeError(
-            f"Databricks profile '{PROFILE}' points at {host or '(no host)'}, but this "
+            f"Databricks profile '{profile}' points at {host or '(no host)'}, but this "
             f"agent must run against {DOGFOOD_HOST}. Log in with a dedicated profile and "
             f"re-run setup:\n"
             f"  databricks auth login --host {DOGFOOD_HOST} --profile brief-agent\n"
