@@ -4,8 +4,10 @@ import importlib
 import sys
 from types import ModuleType, SimpleNamespace
 
+import pytest
 
-def _load_llm(monkeypatch):
+
+def _load_llm(monkeypatch, host="https://e2-dogfood.staging.cloud.databricks.com/"):
     captured: dict[str, object] = {}
 
     class FakeChatDatabricks:
@@ -19,7 +21,9 @@ def _load_llm(monkeypatch):
             return SimpleNamespace(content="brief")
 
     databricks_sdk = ModuleType("databricks.sdk")
-    databricks_sdk.WorkspaceClient = lambda *, profile: {"profile": profile}
+    databricks_sdk.WorkspaceClient = lambda *, profile: SimpleNamespace(
+        profile=profile, config=SimpleNamespace(host=host)
+    )
     databricks_langchain = ModuleType("databricks_langchain")
     databricks_langchain.ChatDatabricks = FakeChatDatabricks
     langchain_messages = ModuleType("langchain_core.messages")
@@ -42,3 +46,11 @@ def test_brief_generation_uses_terra_compatible_request(monkeypatch) -> None:
         "max_tokens": 12_000,
         "reasoning_effort": "low",
     }
+
+
+def test_wrong_profile_host_fails_before_calling_the_model(monkeypatch) -> None:
+    llm, captured = _load_llm(monkeypatch, host="https://dogfood.staging.databricks.com")
+
+    with pytest.raises(RuntimeError, match="points at https://dogfood.staging.databricks.com"):
+        llm.complete("system", "user")
+    assert "messages" not in captured

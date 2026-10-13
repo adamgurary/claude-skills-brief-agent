@@ -10,6 +10,7 @@ from langchain_core.messages import HumanMessage, SystemMessage
 logger = logging.getLogger(__name__)
 
 PROFILE = os.environ.get("BRIEF_AGENT_PROFILE", "dogfood")
+DOGFOOD_HOST = "https://e2-dogfood.staging.cloud.databricks.com"
 MODEL_ENDPOINT = "databricks-gpt-5-6-terra"
 MAX_OUTPUT_TOKENS = 12_000
 MIN_RETRY_OUTPUT_TOKENS = 12_000
@@ -17,12 +18,29 @@ MIN_RETRY_OUTPUT_TOKENS = 12_000
 _model = None
 
 
+def _workspace_client() -> WorkspaceClient:
+    # Serving calls drop the workspace routing header, so on any other host (e.g. the
+    # unified dogfood.staging.databricks.com URL) they redirect to an HTML login page
+    # and fail later as "'str' object has no attribute 'choices'".
+    client = WorkspaceClient(profile=PROFILE)
+    host = (client.config.host or "").rstrip("/")
+    if host != DOGFOOD_HOST:
+        raise RuntimeError(
+            f"Databricks profile '{PROFILE}' points at {host or '(no host)'}, but this "
+            f"agent must run against {DOGFOOD_HOST}. Log in with a dedicated profile and "
+            f"re-run setup:\n"
+            f"  databricks auth login --host {DOGFOOD_HOST} --profile brief-agent\n"
+            f"  BRIEF_AGENT_PROFILE=brief-agent bash setup.sh"
+        )
+    return client
+
+
 def _get_model() -> ChatDatabricks:
     global _model
     if _model is None:
         _model = ChatDatabricks(
             endpoint=MODEL_ENDPOINT,
-            workspace_client=WorkspaceClient(profile=PROFILE),
+            workspace_client=_workspace_client(),
         )
     return _model
 
