@@ -1,0 +1,41 @@
+{
+  "base_revision": "cff1e3f75d7fcf5b5913131bc5bbb00645fa89cd",
+  "files": {
+    ".gitignore": "27b7578d9e36d033683d74e7340ebc0ac1c958324620f118e309db5533dbfd9e",
+    "README.md": "23857a315cca95d49c91732a9dcfbe8b67c90fef66da9200b97965b7c5053fee",
+    "baseline-fixture.tar.gz": "8d3052ec788104640dd7b3ee0a8a9a49148cda89b0b85ecad401c11e95acbbc3",
+    "import_fixture.py": "00c8ab87cfe8b9a53486e85821d71fbcd36dda4aa5eb19a2292b0455e576a02a",
+    "participant_setup.py": "c9879c56f00258425b590333112ffc21cc7bb443f7e3aaec20390d07c5232b51",
+    "plain/brief_agent/__init__.py": "505036d4bcfe929d1689f3725b71ae563ff622cd63d60237114ea0e8c00e9357",
+    "plain/brief_agent/graph.py": "1da06e5f6cf63b2b758116996567df291e31afd2a3ded1deb5702c825d13f851",
+    "plain/brief_agent/llm.py": "bc1eb5f5777cd50362bf9a8c94298666edef2d3b7c6235fb23cd174d3e6cf781",
+    "plain/brief_agent/nodes.py": "49749fa4020bf7e3b284e31072b2e1f00cccefdf2fe3c5106e7e805b9491e1aa",
+    "plain/brief_agent/prompts.py": "6737c6e425e01e1adc8e6d9516ff29b08ff5acf66e33ae8679162222b28f5a3a",
+    "plain/brief_agent/research.py": "62f7b0fd3f597726a771ebb120e943c1067dea77f6702df31a5e1aedcf5ecf99",
+    "plain/brief_agent/state.py": "51e684737172c6cbf0e3fc9675cbbc02419f7087d0d58f0369d39cbc2fc0f985",
+    "plain/render.py": "bf8ef84ebfcb66c89687d7964c27a2226c02de37baf130c730000737573506f8",
+    "plain/run.py": "60592936000dc5723097d945ccf97d629c9bad022d137e399ea1750952cc64dc",
+    "python-runtime.dbexec": "7caedc204a15cb4c77ba17f1b585c995ce99a7cc26180cf773e63cf7aa8b8c3f",
+    "python-runtime.sh": "d52b6a2ae4e96ad448620775df4858caf0dd91a494c08930757c5ab583d77baa",
+    "requirements.lock": "4c895449f73988f47ec3bd7c9a988c52489684fc1ef2e931b649ed6e44abf19b",
+    "run-v2.sh": "bb520e1409399cc5170b9ca62c57264a742e114b4a3abbb3216c976e4790143a",
+    "self_setup.py": "3c47e19e05dffde3d69a03c777ea0a8e765008a1835e43ffdfac222c2c600b49",
+    "setup-v2.sh": "857b50e99b14fbd64311533d5366643fd0163654824896793c2b8a3daf00a700",
+    "source-env.sh": "2847f9cb2f7eb41ed7275163f67ec4d683a49a2d5a279bc627452b0bd901f599",
+    "study-config.json": "254c7bc4145edd0d10a410e976bea730ae1ba2409dda76721cfce76ad53270f4",
+    "study_auth.py": "fdc02b26a13ba8c798a978fb0e41231ef31f9157be89177981b72b9d628f4750"
+  },
+  "fixture_compatibility": "Exact reviewed trace-input and workspace-host guards; fixture traces retain capture provenance",
+  "fixture_compatible_changes": [
+    "brief_agent/llm.py",
+    "run.py"
+  ],
+  "fixture_source_commit": "fcd52774988ff6c0a8f3b0fa08966879ce6aa325",
+  "fixture_source_release_ref": "brief-agent-v2-2026-10-05-rc14",
+  "fixture_source_sha256": "cab66057ba1f7af8c6f5f70cb883b0380ad6930e86ee7d841e842fba5142cc27",
+  "lock_sha256": "4c895449f73988f47ec3bd7c9a988c52489684fc1ef2e931b649ed6e44abf19b",
+  "model_endpoint": "databricks-gpt-5-6-terra",
+  "release_ref": "brief-agent-v2-2026-10-14-rc18",
+  "source_sha256": "f07ee269c51da65bc16b7d7d38b74a2b750ce8c6eb387f5b2b7cb70b5c401a7c",
+  "staged_at_utc": "2026-10-14T17:21:42Z"
+}

@@ -3,13 +3,15 @@ import json
 import logging
 import os
 
+import mlflow
+
 from databricks.sdk import WorkspaceClient
 from databricks_langchain import ChatDatabricks
 from langchain_core.messages import HumanMessage, SystemMessage
 
 logger = logging.getLogger(__name__)
 
-PROFILE = os.environ.get("BRIEF_AGENT_PROFILE", "dogfood")
+DOGFOOD_HOST = "https://e2-dogfood.staging.cloud.databricks.com"
 MODEL_ENDPOINT = "databricks-gpt-5-6-terra"
 MAX_OUTPUT_TOKENS = 12_000
 MIN_RETRY_OUTPUT_TOKENS = 12_000
@@ -17,12 +19,29 @@ MIN_RETRY_OUTPUT_TOKENS = 12_000
 _model = None
 
 
+def _workspace_client() -> WorkspaceClient:
+    host = os.environ.get("BRIEF_AGENT_WORKSPACE_HOST")
+    profile = os.environ.get("BRIEF_AGENT_PROFILE", "dogfood")
+    client = (
+        WorkspaceClient(host=host, auth_type="external-browser")
+        if host else WorkspaceClient(profile=profile)
+    )
+    actual = (client.config.host or "").rstrip("/")
+    if actual != DOGFOOD_HOST:
+        raise RuntimeError(
+            f"Agent login points at {actual or '(no host)'}, but this agent "
+            f"requires {DOGFOOD_HOST}. Rerun bash setup-v2.sh to reconnect. "
+            "Your code and study attempt are preserved."
+        )
+    return client
+
+
 def _get_model() -> ChatDatabricks:
     global _model
     if _model is None:
         _model = ChatDatabricks(
             endpoint=MODEL_ENDPOINT,
-            workspace_client=WorkspaceClient(profile=PROFILE),
+            workspace_client=_workspace_client(),
         )
     return _model
 
@@ -58,6 +77,7 @@ def extract_text(content) -> str:
     return str(content or "").strip()
 
 
+@mlflow.trace(name="model_completion", span_type="LLM")
 def complete(system: str, user: str, max_tokens: int = MAX_OUTPUT_TOKENS,
              reasoning_effort: str = "low") -> str:
     messages = []
